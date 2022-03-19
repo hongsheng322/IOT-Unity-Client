@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
 
 public class PythonUDP : MonoBehaviour
@@ -56,7 +57,7 @@ public class PythonUDP : MonoBehaviour
         mThread.Start();
     }
 
-    void GetInfo()
+    async void GetInfo()
     {
         if (string.IsNullOrWhiteSpace(ip_address_inputfield.text) || string.IsNullOrWhiteSpace(port_inputfield.text))
         {
@@ -76,6 +77,7 @@ public class PythonUDP : MonoBehaviour
         while (running)
         {
             SendAndReceiveData();
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
         }
         //listener.Stop();
         //client.Close();
@@ -86,6 +88,7 @@ public class PythonUDP : MonoBehaviour
         //send to server
         byte[] sendBytes = Encoding.ASCII.GetBytes("Request");
         client.Send(sendBytes, sendBytes.Length);
+        Debug.Log("send request server");
 
         //receive from server
         byte[] receiveBytes = client.Receive(ref RemoteIpEndPoint);
