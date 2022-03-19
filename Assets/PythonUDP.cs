@@ -77,7 +77,7 @@ public class PythonUDP : MonoBehaviour
         while (running)
         {
             SendAndReceiveData();
-            await Task.Delay(TimeSpan.FromSeconds(0.5));
+            await Task.Delay(TimeSpan.FromSeconds(0.2));
         }
         //listener.Stop();
         //client.Close();
