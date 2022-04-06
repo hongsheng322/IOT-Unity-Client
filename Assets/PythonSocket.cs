@@ -18,6 +18,7 @@ public class PythonSocket : MonoBehaviour
     public GameObject kitchen_floor;
     public GameObject light1;
     public GameObject light2;
+    public TMP_Text warning;
 
     public string connectionIP;
     public int connectionPort;

@@ -27,6 +27,7 @@ public class PythonUDP : MonoBehaviour
     public GameObject kitchen_floor;
     public GameObject light1;
     public GameObject light2;
+    public TMP_Text warning;
 
     public Color inactive;
     public Color active;
@@ -42,7 +43,26 @@ public class PythonUDP : MonoBehaviour
     void Update()
     {
         while (jobs.Count > 0)
+        {
             jobs.Dequeue().Invoke();
+            if (kitchen_floor.GetComponent<Renderer>().material.color != inactive && fire.activeSelf)
+            {
+                warning.gameObject.SetActive(true);
+            }
+            else
+            {
+                warning.gameObject.SetActive(false);
+            }
+        }
+
+        if (kitchen_floor.GetComponent<Renderer>().material.color != inactive && fire.activeSelf)
+        {
+            warning.gameObject.SetActive(true);
+        }
+        else
+        {
+            warning.gameObject.SetActive(false);
+        }   
     }
 
     internal void AddJob(Action newJob)
@@ -77,7 +97,7 @@ public class PythonUDP : MonoBehaviour
         while (running)
         {
             SendAndReceiveData();
-            await Task.Delay(TimeSpan.FromSeconds(0.2));
+            await Task.Delay(TimeSpan.FromSeconds(0.01));
         }
         //listener.Stop();
         //client.Close();
@@ -137,9 +157,17 @@ public class PythonUDP : MonoBehaviour
                     kitchen_floor.GetComponent<Renderer>().material.color = active;
                 else
                     kitchen_floor.GetComponent<Renderer>().material.color = inactive;
-            }   
+            }
+
         });
 
+    }
+
+    public IEnumerator firewarning()
+    {
+        warning.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5);
+        warning.gameObject.SetActive(false);
     }
 
     public static Vector3 StringToVector3(string sVector)
